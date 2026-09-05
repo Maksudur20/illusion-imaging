@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="favGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE79A" />
+      <stop offset="50%" stop-color="#E5B352" />
+      <stop offset="100%" stop-color="#AA7A1E" />
+    </linearGradient>
+    <linearGradient id="favCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#A5F3FC" />
+      <stop offset="50%" stop-color="#38BDF8" />
+      <stop offset="100%" stop-color="#0284C7" />
+    </linearGradient>
+    <linearGradient id="favBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background Badge with Gold Border -->
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#favBg)" stroke="url(#favGold)" stroke-width="2.5" />
+  
+  <!-- Outer Solar & Medical Iris Ring -->
+  <circle cx="32" cy="32" r="21" fill="none" stroke="url(#favCyan)" stroke-width="2" stroke-dasharray="8 3" opacity="0.9" />
+  
+  <!-- Cardinal Solar Flares -->
+  <polygon points="32,7 34.5,13 29.5,13" fill="url(#favGold)" />
+  <polygon points="32,57 34.5,51 29.5,51" fill="url(#favGold)" />
+  <polygon points="7,32 13,34.5 13,29.5" fill="url(#favGold)" />
+  <polygon points="57,32 51,34.5 51,29.5" fill="url(#favGold)" />
+  
+  <!-- Royal Monogram: Dual 'I' -->
+  <!-- 1st I (Gold - Solar) -->
+  <path d="M22 22 H29 V25 H27 V39 H29 V42 H22 V39 H24 V25 H22 Z" fill="url(#favGold)" />
+  <circle cx="25.5" cy="18" r="2" fill="url(#favGold)" />
+
+  <!-- 2nd I (Cyan - Medical Imaging) -->
+  <path d="M35 22 H42 V25 H40 V39 H42 V42 H35 V39 H37 V25 H35 Z" fill="url(#favCyan)" />
+  <circle cx="38.5" cy="18" r="2" fill="url(#favCyan)" />
+  
+  <!-- Central Spark -->
+  <polygon points="32,29 33.5,32 32,35 30.5,32" fill="#FFFFFF" />
+</svg>
