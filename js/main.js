@@ -384,7 +384,34 @@ document.addEventListener('DOMContentLoaded', () => {
   initContactForm();
   initCustomSelect();
   initBannerLightboxModal();
+  initQuickPrefetch();
 });
+
+// --- Instant Page Prefetcher (Zero Latency Navigation) ---
+function initQuickPrefetch() {
+  const links = document.querySelectorAll('a[href]');
+  const prefetched = new Set();
+
+  function prefetchUrl(url) {
+    const cleanUrl = url.split('#')[0].split('?')[0];
+    if (!cleanUrl || prefetched.has(cleanUrl) || cleanUrl.startsWith('http') || cleanUrl.startsWith('tel:') || cleanUrl.startsWith('mailto:')) return;
+    prefetched.add(cleanUrl);
+
+    const linkTag = document.createElement('link');
+    linkTag.rel = 'prefetch';
+    linkTag.href = cleanUrl;
+    linkTag.as = 'document';
+    document.head.appendChild(linkTag);
+  }
+
+  links.forEach(link => {
+    const href = link.getAttribute('href');
+    if (!href || href.startsWith('#') || href.startsWith('tel:') || href.startsWith('mailto:') || href.startsWith('http')) return;
+
+    link.addEventListener('mouseenter', () => prefetchUrl(href), { passive: true });
+    link.addEventListener('touchstart', () => prefetchUrl(href), { passive: true });
+  });
+}
 
 // --- Banner Lightbox Modal ---
 function initBannerLightboxModal() {

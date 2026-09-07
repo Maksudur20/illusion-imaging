@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------
-# Illusion Imaging - Clean URLs & Security Configuration
+# Illusion Imaging - Clean URLs, Performance & Compression Configuration
 # ----------------------------------------------------------------------
 
 RewriteEngine On
@@ -9,21 +9,41 @@ RewriteBase /
 RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /.*index\.html\ HTTP/ [NC]
 RewriteRule ^(.*)index\.html$ /$1 [R=301,L]
 
-# 2. Redirect /filename.html to /filename (Clean URL)
+# 2. Redirect /filename.html to /filename (SEO 301 Clean URL)
 RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /([^.]+)\.html\ HTTP/ [NC]
 RewriteRule ^ %1 [R=301,L]
 
 # 3. Internally rewrite /filename to /filename.html if file exists
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{DOCUMENT_ROOT}/$1.html -f [OR]
-RewriteCond %{REQUEST_FILENAME}.html -f
-RewriteRule ^([^/]+)/?$ $1.html [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME}\.html -f
+RewriteRule ^(.*)$ $1.html [L,QSA]
 
 # ----------------------------------------------------------------------
-# MIME Types & Caching Optimizations
+# MIME Types
 # ----------------------------------------------------------------------
 <IfModule mod_mime.c>
   AddType image/svg+xml .svg .svgz
   AddType application/javascript .js
   AddType text/css .css
+</IfModule>
+
+# ----------------------------------------------------------------------
+# GZIP Compression (Speeds up initial page loading by up to 75%)
+# ----------------------------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/javascript application/json image/svg+xml
+</IfModule>
+
+# ----------------------------------------------------------------------
+# Browser Caching (Instant navigation for returning visitors)
+# ----------------------------------------------------------------------
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/jpeg "access plus 1 month"
+  ExpiresByType image/svg+xml "access plus 1 month"
+  ExpiresByType image/x-icon "access plus 1 year"
 </IfModule>
