@@ -383,7 +383,46 @@ document.addEventListener('DOMContentLoaded', () => {
   initProductFilter();
   initContactForm();
   initCustomSelect();
+  initBannerLightboxModal();
 });
+
+// --- Banner Lightbox Modal ---
+function initBannerLightboxModal() {
+  const modal = document.getElementById('bannerModal');
+  if (!modal) return;
+
+  const triggerImg = document.getElementById('heroBannerTrigger');
+  const triggerBtn = document.getElementById('openBannerModalBtn');
+  const previewImg = document.getElementById('heroBannerImg');
+  const closeBtn = document.getElementById('closeBannerModal');
+  const backdrop = document.getElementById('bannerModalBackdrop');
+
+  const openModal = () => {
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeModal = () => {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  };
+
+  if (triggerImg) triggerImg.addEventListener('click', openModal);
+  if (triggerBtn) triggerBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    openModal();
+  });
+  if (previewImg) previewImg.addEventListener('click', openModal);
+
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+  if (backdrop) backdrop.addEventListener('click', closeModal);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('active')) {
+      closeModal();
+    }
+  });
+}
 
 // --- Header Scroll Effect ---
 function initHeader() {

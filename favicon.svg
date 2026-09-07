@@ -1,42 +1,49 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
   <defs>
-    <linearGradient id="favGold" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FFE79A" />
-      <stop offset="50%" stop-color="#E5B352" />
-      <stop offset="100%" stop-color="#AA7A1E" />
+    <linearGradient id="sunGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFAE19" />
+      <stop offset="100%" stop-color="#EA580C" />
     </linearGradient>
-    <linearGradient id="favCyan" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#A5F3FC" />
-      <stop offset="50%" stop-color="#38BDF8" />
+    <linearGradient id="panelGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8" />
       <stop offset="100%" stop-color="#0284C7" />
     </linearGradient>
-    <linearGradient id="favBg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0F172A" />
-      <stop offset="100%" stop-color="#020617" />
+    <linearGradient id="crossGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0E487C" />
+      <stop offset="100%" stop-color="#072B52" />
+    </linearGradient>
+    <linearGradient id="leafGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34D399" />
+      <stop offset="100%" stop-color="#059669" />
     </linearGradient>
   </defs>
-  
-  <!-- Background Badge with Gold Border -->
-  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#favBg)" stroke="url(#favGold)" stroke-width="2.5" />
-  
-  <!-- Outer Solar & Medical Iris Ring -->
-  <circle cx="32" cy="32" r="21" fill="none" stroke="url(#favCyan)" stroke-width="2" stroke-dasharray="8 3" opacity="0.9" />
-  
-  <!-- Cardinal Solar Flares -->
-  <polygon points="32,7 34.5,13 29.5,13" fill="url(#favGold)" />
-  <polygon points="32,57 34.5,51 29.5,51" fill="url(#favGold)" />
-  <polygon points="7,32 13,34.5 13,29.5" fill="url(#favGold)" />
-  <polygon points="57,32 51,34.5 51,29.5" fill="url(#favGold)" />
-  
-  <!-- Royal Monogram: Dual 'I' -->
-  <!-- 1st I (Gold - Solar) -->
-  <path d="M22 22 H29 V25 H27 V39 H29 V42 H22 V39 H24 V25 H22 Z" fill="url(#favGold)" />
-  <circle cx="25.5" cy="18" r="2" fill="url(#favGold)" />
 
-  <!-- 2nd I (Cyan - Medical Imaging) -->
-  <path d="M35 22 H42 V25 H40 V39 H42 V42 H35 V39 H37 V25 H35 Z" fill="url(#favCyan)" />
-  <circle cx="38.5" cy="18" r="2" fill="url(#favCyan)" />
-  
-  <!-- Central Spark -->
-  <polygon points="32,29 33.5,32 32,35 30.5,32" fill="#FFFFFF" />
+  <!-- Background rounded card -->
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="#0B192C" stroke="rgba(212, 175, 55, 0.4)" stroke-width="1.5" />
+
+  <!-- Top Sun -->
+  <circle cx="32" cy="17" r="6" fill="url(#sunGrad)" />
+  <!-- Sun Rays -->
+  <g stroke="url(#sunGrad)" stroke-width="1.6" stroke-linecap="round">
+    <line x1="32" y1="7" x2="32" y2="9.5" />
+    <line x1="24.5" y1="10" x2="26.3" y2="11.8" />
+    <line x1="39.5" y1="10" x2="37.7" y2="11.8" />
+    <line x1="21.5" y1="17" x2="24" y2="17" />
+    <line x1="42.5" y1="17" x2="40" y2="17" />
+  </g>
+
+  <!-- Solar Panel Grid in Perspective -->
+  <polygon points="21,21 43,21 40,28 24,28" fill="url(#panelGrad)" stroke="#FFFFFF" stroke-width="0.8" />
+  <line x1="27" y1="21" x2="28.5" y2="28" stroke="#FFFFFF" stroke-width="0.6" />
+  <line x1="32" y1="21" x2="32" y2="28" stroke="#FFFFFF" stroke-width="0.6" />
+  <line x1="37" y1="21" x2="35.5" y2="28" stroke="#FFFFFF" stroke-width="0.6" />
+
+  <!-- Green Eco Leaf Accent -->
+  <path d="M34,22 Q43,24 44,32 Q35,34 34,22 Z" fill="url(#leafGrad)" stroke="#FFFFFF" stroke-width="0.8" />
+
+  <!-- Medical Cross Base -->
+  <path d="M26,33 H38 V39 H45 V47 H38 V54 H26 V47 H19 V39 H26 Z" fill="url(#crossGrad)" stroke="#38BDF8" stroke-width="1" />
+
+  <!-- Heartbeat / ECG Line Inside Cross -->
+  <path d="M21,43 L26,43 L28,38 L31,48 L34,40 L36,44 L43,44" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
 </svg>
