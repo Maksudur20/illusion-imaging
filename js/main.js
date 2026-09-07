@@ -384,34 +384,134 @@ document.addEventListener('DOMContentLoaded', () => {
   initContactForm();
   initCustomSelect();
   initBannerLightboxModal();
+  setupInstantNavigation();
   initQuickPrefetch();
 });
 
-// --- Instant Page Prefetcher (Zero Latency Navigation) ---
+// --- Instant Page Prefetcher & In-Memory Cache ---
+const pageCache = new Map();
+
+// Cache initial page
+if (typeof window !== 'undefined') {
+  pageCache.set(window.location.href.split('#')[0], document.documentElement.outerHTML);
+}
+
+async function fetchPageHtml(url) {
+  const cleanUrl = url.split('#')[0];
+  if (pageCache.has(cleanUrl)) {
+    return pageCache.get(cleanUrl);
+  }
+  const res = await fetch(cleanUrl);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const html = await res.text();
+  pageCache.set(cleanUrl, html);
+  return html;
+}
+
 function initQuickPrefetch() {
   const links = document.querySelectorAll('a[href]');
-  const prefetched = new Set();
-
-  function prefetchUrl(url) {
-    const cleanUrl = url.split('#')[0].split('?')[0];
-    if (!cleanUrl || prefetched.has(cleanUrl) || cleanUrl.startsWith('http') || cleanUrl.startsWith('tel:') || cleanUrl.startsWith('mailto:')) return;
-    prefetched.add(cleanUrl);
-
-    const linkTag = document.createElement('link');
-    linkTag.rel = 'prefetch';
-    linkTag.href = cleanUrl;
-    linkTag.as = 'document';
-    document.head.appendChild(linkTag);
-  }
-
   links.forEach(link => {
     const href = link.getAttribute('href');
-    if (!href || href.startsWith('#') || href.startsWith('tel:') || href.startsWith('mailto:') || href.startsWith('http')) return;
+    if (!href || href.startsWith('#') || href.startsWith('tel:') || href.startsWith('mailto:') || link.getAttribute('target') === '_blank') return;
+    const url = new URL(href, window.location.href);
+    if (url.origin !== window.location.origin) return;
 
-    link.addEventListener('mouseenter', () => prefetchUrl(href), { passive: true });
-    link.addEventListener('touchstart', () => prefetchUrl(href), { passive: true });
+    link.addEventListener('mouseenter', () => fetchPageHtml(url.href).catch(() => {}), { passive: true });
+    link.addEventListener('touchstart', () => fetchPageHtml(url.href).catch(() => {}), { passive: true });
   });
 }
+
+function reinitializeAllComponents() {
+  initHeader();
+  initMobileDrawer();
+  initScrollTop();
+  initProductModal();
+  initProductFilter();
+  initContactForm();
+  initCustomSelect();
+  initBannerLightboxModal();
+  setupInstantNavigation();
+  initQuickPrefetch();
+}
+
+// --- Seamless Instant SPA Router (Eliminates Browser Loading & Tab Spinner) ---
+async function navigateTo(targetHref, pushToHistory = true) {
+  const url = new URL(targetHref, window.location.href);
+
+  let bar = document.getElementById('spaProgressBar');
+  if (!bar) {
+    bar = document.createElement('div');
+    bar.id = 'spaProgressBar';
+    bar.className = 'spa-progress-bar';
+    document.body.appendChild(bar);
+  }
+  bar.style.opacity = '1';
+  bar.style.width = '35%';
+
+  try {
+    const html = await fetchPageHtml(url.href);
+    bar.style.width = '75%';
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+
+    document.title = doc.title;
+    document.body.innerHTML = doc.body.innerHTML;
+
+    if (pushToHistory) {
+      window.history.pushState({}, '', targetHref);
+    }
+
+    if (url.hash) {
+      setTimeout(() => {
+        const targetEl = document.querySelector(url.hash);
+        if (targetEl) {
+          targetEl.scrollIntoView({ behavior: 'smooth' });
+        } else {
+          window.scrollTo(0, 0);
+        }
+      }, 50);
+    } else {
+      window.scrollTo(0, 0);
+    }
+
+    reinitializeAllComponents();
+
+    bar.style.width = '100%';
+    setTimeout(() => {
+      bar.style.opacity = '0';
+      setTimeout(() => { if (bar && bar.parentNode) bar.remove(); }, 200);
+    }, 120);
+  } catch (err) {
+    console.warn('SPA navigation fallback to standard link:', err);
+    window.location.href = targetHref;
+  }
+}
+
+function setupInstantNavigation() {
+  document.querySelectorAll('a[href]').forEach(link => {
+    const href = link.getAttribute('href');
+    if (!href || href.startsWith('#') || href.startsWith('tel:') || href.startsWith('mailto:') || href.startsWith('javascript:') || link.getAttribute('target') === '_blank') {
+      return;
+    }
+
+    const url = new URL(href, window.location.href);
+    if (url.origin !== window.location.origin) return;
+
+    link.onclick = (e) => {
+      if (url.pathname === window.location.pathname && url.hash) {
+        return;
+      }
+      e.preventDefault();
+      navigateTo(href, true);
+    };
+  });
+}
+
+// Browser Back / Forward History Support
+window.addEventListener('popstate', () => {
+  navigateTo(window.location.href, false);
+});
 
 // --- Banner Lightbox Modal ---
 function initBannerLightboxModal() {
