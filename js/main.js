@@ -611,7 +611,7 @@ function handleProductInquiry(product) {
     showToast(`Selected "${product.title}" for your quote request!`, 'info');
   } else {
     // On another page, redirect with anchor
-    window.location.href = `products-contact.html?product=${encodeURIComponent(product.id)}#contact-section`;
+    window.location.href = `products-contact?product=${encodeURIComponent(product.id)}#contact-section`;
   }
 }
 
