@@ -722,30 +722,53 @@ button, input, textarea, select {
   border-bottom: 1px solid rgba(212, 175, 55, 0.2);
 }
 
-/* --- Hero Banner Only Section --- */
+/* --- Modern Hero Showcase Section --- */
+.hero-section.hero-modern-showcase,
 .hero-section.hero-banner-only {
-  padding: 0;
-  background: #040d1e;
-  border-bottom: 2px solid rgba(212, 175, 55, 0.25);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  padding: 2.25rem 1.5rem 2.5rem;
+  background: radial-gradient(circle at 50% 20%, #f8fafc 0%, #edf2f7 65%, #e2e8f0 100%);
+  border-bottom: 1px solid var(--border-light);
+  overflow: visible;
 }
 
+.hero-showcase-container,
 .hero-banner-container {
   width: 100%;
-  max-width: 100%;
+  max-width: 1240px;
   margin: 0 auto;
-  line-height: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #040d1e;
 }
 
+.hero-frame-card {
+  position: relative;
+  width: 100%;
+  border-radius: 24px;
+  overflow: hidden;
+  background: #040d1e;
+  border: 1.5px solid rgba(212, 175, 55, 0.38);
+  box-shadow: 
+    0 25px 60px -15px rgba(6, 14, 29, 0.36),
+    0 12px 28px -6px rgba(0, 0, 0, 0.22),
+    0 0 35px rgba(212, 175, 55, 0.18);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
+  line-height: 0;
+}
+
+.hero-frame-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(212, 175, 55, 0.75);
+  box-shadow: 
+    0 32px 75px -15px rgba(6, 14, 29, 0.48),
+    0 16px 36px -6px rgba(0, 0, 0, 0.28),
+    0 0 50px rgba(212, 175, 55, 0.32);
+}
+
+.hero-showcase-image,
 .hero-banner-image {
   width: 100%;
-  max-width: 100%;
   height: auto;
   display: block;
+  object-fit: cover;
+  border-radius: 22px;
 }
 
 .hero-bg-shapes {
@@ -2998,6 +3021,21 @@ button, input, textarea, select {
 }
 
 @media (max-width: 768px) {
+  .hero-section.hero-modern-showcase,
+  .hero-section.hero-banner-only {
+    padding: 1.25rem 1rem 1.75rem;
+  }
+  .hero-frame-card {
+    border-radius: 18px;
+    border-width: 1px;
+    box-shadow: 
+      0 16px 36px -10px rgba(6, 14, 29, 0.35),
+      0 0 25px rgba(212, 175, 55, 0.15);
+  }
+  .hero-showcase-image,
+  .hero-banner-image {
+    border-radius: 17px;
+  }
   .top-bar {
     display: none;
   }
@@ -3055,6 +3093,20 @@ button, input, textarea, select {
 }
 
 @media (max-width: 480px) {
+  .hero-section.hero-modern-showcase,
+  .hero-section.hero-banner-only {
+    padding: 0.85rem 0.65rem 1.25rem;
+  }
+  .hero-frame-card {
+    border-radius: 14px;
+    box-shadow: 
+      0 12px 26px -8px rgba(6, 14, 29, 0.3),
+      0 0 18px rgba(212, 175, 55, 0.12);
+  }
+  .hero-showcase-image,
+  .hero-banner-image {
+    border-radius: 13px;
+  }
   .hero-headline {
     font-size: 1.85rem;
   }
