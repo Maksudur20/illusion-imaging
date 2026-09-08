@@ -830,34 +830,52 @@ function initProductFilter() {
 
   if (!filterBtns.length || !productCards.length) return;
 
+  function applyCategoryFilter(filterValue) {
+    filterBtns.forEach(b => {
+      if (b.getAttribute('data-filter') === filterValue) {
+        b.classList.add('active');
+      } else {
+        b.classList.remove('active');
+      }
+    });
+
+    productCards.forEach(card => {
+      const cardCategory = card.getAttribute('data-category');
+      if (filterValue === 'all' || cardCategory === filterValue) {
+        card.style.display = 'flex';
+        setTimeout(() => {
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, 10);
+      } else {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(15px)';
+        setTimeout(() => {
+          card.style.display = 'none';
+        }, 200);
+      }
+    });
+  }
+
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      filterBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
       const filterValue = btn.getAttribute('data-filter');
-
-      productCards.forEach(card => {
-        const cardCategory = card.getAttribute('data-category');
-        if (filterValue === 'all' || cardCategory === filterValue) {
-          card.style.display = 'flex';
-          setTimeout(() => {
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0)';
-          }, 10);
-        } else {
-          card.style.opacity = '0';
-          card.style.transform = 'translateY(15px)';
-          setTimeout(() => {
-            card.style.display = 'none';
-          }, 200);
-        }
-      });
+      applyCategoryFilter(filterValue);
     });
   });
 
-  // Check URL params for pre-selected product
+  // Check URL params or hash for pre-selected category
   const urlParams = new URLSearchParams(window.location.search);
+  const requestedCategory = (urlParams.get('category') || urlParams.get('filter') || '').toLowerCase();
+  const rawHash = (window.location.hash || '').toLowerCase();
+
+  if (requestedCategory === 'solar' || rawHash.includes('solar')) {
+    applyCategoryFilter('solar');
+  } else if (requestedCategory === 'medical' || rawHash.includes('medical')) {
+    applyCategoryFilter('medical');
+  }
+
+  // Check URL params for pre-selected product
   const requestedProductId = urlParams.get('product');
   if (requestedProductId && PRODUCTS_DATA[requestedProductId]) {
     setTimeout(() => {

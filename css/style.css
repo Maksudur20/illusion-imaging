@@ -725,7 +725,7 @@ button, input, textarea, select {
 /* --- Modern Hero Showcase Section --- */
 .hero-section.hero-modern-showcase,
 .hero-section.hero-banner-only {
-  padding: 2.25rem 1.5rem 2.5rem;
+  padding: 1.25rem 1.25rem 1.75rem;
   background: radial-gradient(circle at 50% 20%, #f8fafc 0%, #edf2f7 65%, #e2e8f0 100%);
   border-bottom: 1px solid var(--border-light);
   overflow: visible;
@@ -734,7 +734,7 @@ button, input, textarea, select {
 .hero-showcase-container,
 .hero-banner-container {
   width: 100%;
-  max-width: 1240px;
+  max-width: 1040px;
   margin: 0 auto;
 }
 
@@ -769,6 +769,172 @@ button, input, textarea, select {
   display: block;
   object-fit: cover;
   border-radius: 22px;
+}
+
+/* --- Hero Hotspot Interactive Buttons Over Image --- */
+.hero-image-wrapper {
+  position: relative;
+  width: 100%;
+  display: block;
+  line-height: 0;
+  overflow: hidden;
+  border-radius: 22px;
+}
+
+.hero-hotspot-btn {
+  position: absolute;
+  top: 60.35%;
+  height: 6.58%;
+  border-radius: 9999px;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  background: transparent;
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hero-hotspot-solar {
+  left: 32.23%;
+  width: 17.11%;
+}
+
+.hero-hotspot-medical {
+  left: 50.40%;
+  width: 17.44%;
+}
+
+/* Glowing Pill Highlight on Hover & Keyboard Focus */
+.hero-hotspot-solar:hover,
+.hero-hotspot-solar:focus-visible {
+  box-shadow: 
+    0 0 0 2px rgba(255, 255, 255, 0.9),
+    0 0 24px rgba(34, 197, 94, 0.7),
+    inset 0 0 14px rgba(255, 255, 255, 0.35);
+  transform: scale(1.025);
+  background: rgba(34, 197, 94, 0.12);
+}
+
+.hero-hotspot-medical:hover,
+.hero-hotspot-medical:focus-visible {
+  box-shadow: 
+    0 0 0 2px rgba(255, 255, 255, 0.9),
+    0 0 24px rgba(2, 132, 199, 0.8),
+    inset 0 0 14px rgba(255, 255, 255, 0.35);
+  transform: scale(1.025);
+  background: rgba(2, 132, 199, 0.12);
+}
+
+.hero-hotspot-btn:active {
+  transform: scale(0.98);
+}
+
+/* Subtle Shimmer Sweeps to hint clickability without obscuring text */
+.hero-hotspot-btn .hotspot-shimmer {
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.28) 50%,
+    transparent 100%
+  );
+  transform: skewX(-25deg);
+  animation: hotspot-shine 3.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.hero-hotspot-medical .hotspot-shimmer {
+  animation-delay: 1.9s;
+}
+
+@keyframes hotspot-shine {
+  0%, 60% {
+    left: -120%;
+  }
+  100% {
+    left: 220%;
+  }
+}
+
+/* Mobile Quick Action Buttons */
+.hero-mobile-actions {
+  display: none;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  width: 100%;
+}
+
+.hero-mobile-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  padding: 0.88rem 1.25rem;
+  font-size: 0.92rem;
+  font-weight: 700;
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  text-align: center;
+}
+
+.hero-mobile-solar {
+  background: linear-gradient(135deg, #15803d 0%, #22c55e 100%);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.hero-mobile-solar:hover,
+.hero-mobile-solar:active {
+  background: linear-gradient(135deg, #166534 0%, #16a34a 100%);
+  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.45);
+  transform: translateY(-2px);
+  color: #ffffff;
+}
+
+.hero-mobile-medical {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.hero-mobile-medical:hover,
+.hero-mobile-medical:active {
+  background: linear-gradient(135deg, #0369a1 0%, #075985 100%);
+  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.45);
+  transform: translateY(-2px);
+  color: #ffffff;
+}
+
+@media (max-width: 768px) {
+  .hero-mobile-actions {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+/* Accessibility screen-reader only utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 
 .hero-bg-shapes {
@@ -1677,6 +1843,10 @@ button, input, textarea, select {
   color: #fff;
   border-color: var(--royal-gold);
   box-shadow: 0 4px 14px var(--royal-gold-glow);
+}
+
+#products-section {
+  scroll-margin-top: 90px;
 }
 
 .products-grid {
