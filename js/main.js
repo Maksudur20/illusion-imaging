@@ -381,6 +381,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollTop();
   initProductModal();
   initProductFilter();
+  initHeroButtonNavigation();
   initContactForm();
   initCustomSelect();
   initBannerLightboxModal();
@@ -427,6 +428,7 @@ function reinitializeAllComponents() {
   initScrollTop();
   initProductModal();
   initProductFilter();
+  initHeroButtonNavigation();
   initContactForm();
   initCustomSelect();
   initBannerLightboxModal();
@@ -489,6 +491,11 @@ async function navigateTo(targetHref, pushToHistory = true) {
 }
 
 function setupInstantNavigation() {
+  // If running via local file:// protocol, disable SPA interception so local file clicks work natively
+  if (window.location.protocol === 'file:') {
+    return;
+  }
+
   document.querySelectorAll('a[href]').forEach(link => {
     const href = link.getAttribute('href');
     if (!href || href.startsWith('#') || href.startsWith('tel:') || href.startsWith('mailto:') || href.startsWith('javascript:') || link.getAttribute('target') === '_blank') {
@@ -843,16 +850,12 @@ function initProductFilter() {
       const cardCategory = card.getAttribute('data-category');
       if (filterValue === 'all' || cardCategory === filterValue) {
         card.style.display = 'flex';
-        setTimeout(() => {
-          card.style.opacity = '1';
-          card.style.transform = 'translateY(0)';
-        }, 10);
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
       } else {
+        card.style.display = 'none';
         card.style.opacity = '0';
         card.style.transform = 'translateY(15px)';
-        setTimeout(() => {
-          card.style.display = 'none';
-        }, 200);
       }
     });
   }
@@ -864,15 +867,31 @@ function initProductFilter() {
     });
   });
 
-  // Check URL params or hash for pre-selected category
+  // Extract category from search params or hash
   const urlParams = new URLSearchParams(window.location.search);
-  const requestedCategory = (urlParams.get('category') || urlParams.get('filter') || '').toLowerCase();
+  let requestedCategory = (urlParams.get('category') || urlParams.get('filter') || '').toLowerCase();
   const rawHash = (window.location.hash || '').toLowerCase();
+
+  // If params were placed after hash like #products-section?category=solar
+  if (!requestedCategory && rawHash.includes('category=')) {
+    const splitHash = rawHash.split('category=')[1];
+    if (splitHash) requestedCategory = splitHash.split('&')[0].split('#')[0];
+  }
 
   if (requestedCategory === 'solar' || rawHash.includes('solar')) {
     applyCategoryFilter('solar');
   } else if (requestedCategory === 'medical' || rawHash.includes('medical')) {
     applyCategoryFilter('medical');
+  }
+
+  // Smooth scroll down to products section
+  if (requestedCategory || rawHash.includes('products')) {
+    setTimeout(() => {
+      const prodSec = document.getElementById('products-section');
+      if (prodSec) {
+        prodSec.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 120);
   }
 
   // Check URL params for pre-selected product
@@ -882,6 +901,31 @@ function initProductFilter() {
       window.openProductModal(requestedProductId);
     }, 400);
   }
+}
+
+// --- Hero Buttons Direct Click Handler (Works on file://, http://, and https://) ---
+function initHeroButtonNavigation() {
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.hero-hotspot-solar, .hero-mobile-solar, .hero-hotspot-medical, .hero-mobile-medical');
+    if (!btn) return;
+
+    e.preventDefault();
+    const isSolar = btn.classList.contains('hero-hotspot-solar') || btn.classList.contains('hero-mobile-solar');
+    const category = isSolar ? 'solar' : 'medical';
+
+    const isFile = window.location.protocol === 'file:';
+    const targetUrl = `products-contact.html?category=${category}#products-section`;
+
+    if (isFile) {
+      window.location.href = targetUrl;
+    } else {
+      if (typeof navigateTo === 'function') {
+        navigateTo(targetUrl, true);
+      } else {
+        window.location.href = targetUrl;
+      }
+    }
+  });
 }
 
 // --- Contact Form Interaction & Frontend Validation ---
